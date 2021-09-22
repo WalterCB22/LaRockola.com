@@ -18,7 +18,7 @@ public class ConexionBD {
     public ConexionBD() {
         DB_driver = "com.mysql.jdbc.Driver";
         host = "localhost:3306";
-        db = "tp";
+        db = "rockola";
         url = "jdbc:mysql://"+host+"/"+db;
         username = "root";
         password = "admin";
@@ -115,8 +115,12 @@ public class ConexionBD {
     }
     
     public boolean rollbackBD(){
-                //conexion.rollback();
-
-        return true;
+        try{
+            conexion.rollback();
+            return true;
+        }catch (SQLException sqlex) {
+            System.out.println("Error al hacer rollback " + sqlex.getMessage());
+            return false;
+        }
     }
 }
