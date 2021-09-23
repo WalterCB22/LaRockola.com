@@ -6,6 +6,7 @@ import persistencia.ConexionBD;
 
 
 public class Cancion {
+    private int id;
     private String nombre_cancion;
     private String genero;
     private String artista;
@@ -13,6 +14,14 @@ public class Cancion {
     public Cancion() {
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getNombre_cancion() {
         return nombre_cancion;
     }
@@ -78,11 +87,12 @@ public class Cancion {
     }
     public boolean actualizarCancion(){
         ConexionBD conexion = new ConexionBD();
-        String sentencia = "UPDATE INTO canciones SET "
+        String sentencia = "UPDATE canciones SET "
                 + "nombre_cancion='"+this.nombre_cancion 
                 + "',genero='"+this.genero
-                + "',artista='"+this.artista+"';";
-        
+                + "',artista='"+this.artista
+                + "' WHERE id="+ this.id +";";
+        System.out.println(sentencia);
         if(conexion.setAutoCommitBD(false)){
             if(conexion.actualizarBD(sentencia)){
                 conexion.commitBD();
@@ -101,13 +111,14 @@ public class Cancion {
     }
     public List<Cancion> listarCanciones() throws SQLException{
         ConexionBD conexion = new ConexionBD();
-        String sentencia = "SELECT * FROM contactos ORDER BY identificacion ASC;";
+        String sentencia = "SELECT * FROM canciones ORDER BY id ASC;";
         List<Cancion> listaCanciones = new ArrayList<>();
         ResultSet datos = conexion.consultarDB(sentencia);
         
         Cancion cancion;
         while (datos.next()) {
             cancion = new Cancion();
+            cancion.setId(Integer.parseInt(datos.getString("id")));
             cancion.setNombre_cancion(datos.getString("nombre_cancion"));
             cancion.setGenero(datos.getString("genero"));
             cancion.setArtista(datos.getString("artista"));
@@ -122,6 +133,7 @@ public class Cancion {
         ResultSet datos = conexion.consultarDB(sentencia);
         if(datos.next()){
             Cancion cancion = new Cancion();
+            cancion.setId(Integer.parseInt(datos.getString("id")));
             cancion.setNombre_cancion(datos.getString("nombre_cancion"));
             cancion.setGenero(datos.getString("genero"));
             cancion.setArtista(datos.getString("artista"));
@@ -131,5 +143,10 @@ public class Cancion {
             return null; //no había contacto
         }
     
+    }
+    @Override 
+    public String toString(){
+        String mensaje = "ID:"+id+"\nNombre: "+nombre_cancion+"\nGenero: "+genero+"\nArtista: "+artista; 
+        return mensaje;
     }
 }
