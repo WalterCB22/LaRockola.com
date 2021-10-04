@@ -29,7 +29,7 @@ app.controller('cancionController', function ($scope, $http) {
                 url: 'peticionesCanciones.jsp',
                 params: cancion
             }).then(function (respuesta) {
-                //$scope.listarCanciones();
+                $scope.listarCanciones();
                 console.log("funciona")
             });
         }
